@@ -1,37 +1,29 @@
 let token = "";
 export default {
-	async fetch(request ,env) {
+	async fetch(request, env) {
 		const url = new URL(request.url);
-		if(url.pathname !== '/'){
-			let githubRawUrl = 'https://gitee.com/api/v5/repos';
-			if (new RegExp(githubRawUrl, 'i').test(url.pathname)){
-				githubRawUrl += url.pathname.split(githubRawUrl)[1];
-			} else {
-				if (env.GH_NAME) {
-					githubRawUrl += '/' + env.GH_NAME;
-					if (env.GH_REPO) {
-						githubRawUrl += '/' + env.GH_REPO;
-						if (env.GH_BRANCH) githubRawUrl += '/' + env.GH_BRANCH;
-					}
-				}
-				githubRawUrl += url.pathname;
+		if (url.pathname !== '/') {
+			let giteeRawUrl = 'https://gitee.com/api/v5/repos';
+			
+			// 构建 Gitee 请求的基本路径
+			//const repoPath = url.pathname.split('/').slice(2).join('/');
+			giteeRawUrl += `${url.pathname}?access_token=${env.GH_TOKEN}&ref=master`;
+
+			// 从查询参数中获取 access_token，并将其赋值给 token
+			if (url.searchParams.has('access_token')) {
+				token = url.searchParams.get('access_token') || token;
+			} else if (env.GH_TOKEN) {
+				token = env.GH_TOKEN || token;
 			}
-			//console.log(githubRawUrl);
-			if (env.GH_TOKEN && env.TOKEN){
-				if (env.TOKEN == url.searchParams.get('token')) token = env.GH_TOKEN || token;
-				else token = url.searchParams.get('token') || token;
-			} else token = url.searchParams.get('token') || env.GH_TOKEN || env.TOKEN || token;
-			
-			const githubToken = token;
-			//console.log(githubToken);
-			if (!githubToken || githubToken == '') return new Response('TOKEN不能为空', { status: 400 });
-			
+
+			if (!token) return new Response('TOKEN不能为空', { status: 400 });
+
 			// 构建请求头
 			const headers = new Headers();
-			headers.append('Authorization', `token ${githubToken}`);
+			headers.append('Authorization'， `token ${token}`);
 
 			// 发起请求
-			const response = await fetch(githubRawUrl, { headers });
+			const response = await fetch(giteeRawUrl, { headers });
 
 			// 检查请求是否成功 (状态码 200 到 299)
 			if (response.ok) {
@@ -90,15 +82,13 @@ async function nginx() {
 	</body>
 	</html>
 	`
-	return text ;
+	return text;
 }
 
 async function ADD(envadd) {
-	var addtext = envadd.replace(/[	|"'\r\n]+/g, ',').replace(/,+/g, ',');	// 将空格、双引号、单引号和换行符替换为逗号
-	//console.log(addtext);
+	var addtext = envadd.replace(/[	|"'\r\n]+/g, ',').replace(/,+/g, ','); // 将空格、双引号、单引号和换行符替换为逗号
 	if (addtext.charAt(0) == ',') addtext = addtext.slice(1);
-	if (addtext.charAt(addtext.length -1) == ',') addtext = addtext.slice(0, addtext.length - 1);
+	if (addtext.charAt(addtext.length - 1) == ',') addtext = addtext.slice(0, addtext.length - 1);
 	const add = addtext.split(',');
-	//console.log(add);
-	return add ;
+	return add;
 }
