@@ -6,7 +6,6 @@ export default {
 			let giteeRawUrl = 'https://gitee.com/api/v5/repos';
 			
 			// 构建 Gitee 请求的基本路径
-			//const repoPath = url.pathname.split('/').slice(2).join('/');
 			giteeRawUrl += `${url.pathname}?access_token=${env.GH_TOKEN}&ref=master`;
 
 			// 从查询参数中获取 access_token，并将其赋值给 token
@@ -20,7 +19,7 @@ export default {
 
 			// 构建请求头
 			const headers = new Headers();
-			headers.append('Authorization'， `token ${token}`);
+			headers.append('Authorization', `token ${token}`); // 修正了逗号
 
 			// 发起请求
 			const response = await fetch(giteeRawUrl, { headers });
