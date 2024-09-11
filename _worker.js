@@ -3,7 +3,7 @@ export default {
 	async fetch(request ,env) {
 		const url = new URL(request.url);
 		if(url.pathname !== '/'){
-			let githubRawUrl = 'https://raw.githubusercontent.com';
+			let githubRawUrl = 'https://gitee.com/api/v5/repos';
 			if (new RegExp(githubRawUrl, 'i').test(url.pathname)){
 				githubRawUrl += url.pathname.split(githubRawUrl)[1];
 			} else {
