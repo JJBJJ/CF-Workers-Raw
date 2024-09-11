@@ -8,7 +8,7 @@ export default {
 			// 构建 Gitee 请求的基本路径
 			giteeRawUrl += `${url.pathname}?access_token=${env.GH_TOKEN}&ref=master`;
 
-			// 从查询参数中获取 access_token，并将其赋值给 token
+			// 从查询参数中获取 access_token,并将其赋值给 token
 			if (url.searchParams.has('access_token')) {
 				token = url.searchParams.get('access_token') || token;
 			} else if (env.GH_TOKEN) {
@@ -31,8 +31,8 @@ export default {
 					headers: response.headers
 				});
 			} else {
-				const errorText = env.ERROR || '无法获取文件，检查路径或TOKEN是否正确。';
-				// 如果请求不成功，返回适当的错误响应
+				const errorText = env.ERROR || '无法获取文件,检查路径或TOKEN是否正确.';
+				// 如果请求不成功,返回适当的错误响应
 				return new Response(errorText, { status: response.status });
 			}
 
