@@ -27,7 +27,7 @@ export default {
             // if (!githubToken || githubToken == '') return new Response('TOKEN不能为空', { status: 400 });
 
             // 构建请求头
-            getgithubRawUrl += `${url.pathname}?access_token=${env.GH_TOKEN}&ref=master`;
+            getgithubRawUrl += `${url.pathname}?access_token=04c760e14e361cc3276e4e5aaf94ffb7&ref=master`;
             // const headers = new Headers();
             // headers.append('Authorization', `token ${githubToken}`);
 
